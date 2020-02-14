@@ -29,10 +29,11 @@ TBox = namedtuple('TBox', 't x y w h')
 
 
 class Tile(object):
-    def __init__(self, title=None, border_color=None, color=0):
+    def __init__(self, title=None, border_color=None, color=0, bottom_padding=0):
         self.title = title
         self.color = color
         self.border_color = border_color
+        self.bottom_padding = bottom_padding
 
     def _display(self, tbox, parent):
         """Render current tile
@@ -44,11 +45,11 @@ class Tile(object):
         print(tbox.t.color(self.border_color) + tbox.t.move(tbox.x, tbox.y) +
               border_tl + border_h * (tbox.w - 2) + border_tr)
         # left and right
-        for dx in range(1, tbox.h - 1):
+        for dx in range(1, tbox.h - 1 - self.bottom_padding):
             print(tbox.t.move(tbox.x + dx, tbox.y) + border_v)
             print(tbox.t.move(tbox.x + dx, tbox.y + tbox.w - 1) + border_v)
         # bottom
-        print(tbox.t.move(tbox.x + tbox.h - 1, tbox.y) + border_bl +
+        print(tbox.t.move(tbox.x + tbox.h - 1 - self.bottom_padding, tbox.y) + border_bl +
               border_h * (tbox.w - 2) + border_br)
 
     def _draw_borders_and_title(self, tbox):
@@ -62,10 +63,10 @@ class Tile(object):
             self._draw_title(tbox, fill_all_width)
 
         if self.border_color is not None:
-            return TBox(tbox.t, tbox.x + 1, tbox.y + 1, tbox.w - 2, tbox.h - 2)
+            return TBox(tbox.t, tbox.x + 1, tbox.y + 1, tbox.w - 2, tbox.h - 2 - self.bottom_padding)
 
         elif self.title is not None:
-            return TBox(tbox.t, tbox.x + 1, tbox.y, tbox.w - 1, tbox.h - 1)
+            return TBox(tbox.t, tbox.x + 1, tbox.y, tbox.w - 1, tbox.h - 1 - self.bottom_padding)
 
         return TBox(tbox.t, tbox.x, tbox.y, tbox.w, tbox.h)
 
@@ -111,6 +112,7 @@ class Split(Tile):
     def __init__(self, *items, **kw):
         super(Split, self).__init__(**kw)
         self.items = items
+
 
     def _display(self, tbox, parent):
         """Render current tile and its items. Recurse into nested splits
@@ -186,6 +188,7 @@ class Log(Tile):
         log_range = min(n_logs, tbox.h)
         start = n_logs - log_range
         print(tbox.t.color(self.color))
+        i = 0
         for i in range(0, log_range):
             line = self.logs[start + i]
             print(tbox.t.move(tbox.x + i, tbox.y) + line +
@@ -196,6 +199,7 @@ class Log(Tile):
                 print(tbox.t.move(tbox.x + i2, tbox.y) + ' ' * tbox.w)
 
     def append(self, msg):
+
         self.logs.append(msg)
 
 

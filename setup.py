@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
-version = '0.1'
+version = '0.2'
 
-setup(name='dashing',
+setup(name='py-dashing',
       version=version,
-      description="High-level terminal-based dashboard",
+      description="High-level terminal-based dashboard - Forked from FedericoCeratto/dashing",
       long_description="""\
 Easily create dashboards""",
       classifiers=[
@@ -16,7 +16,7 @@ Easily create dashboards""",
       keywords='dashboard terminal',
       author='Federico Ceratto',
       author_email='federico@debian.org',
-      url='https://github.com/FedericoCeratto/dashing',
+      url='https://github.com/hemanthmalla/dashing',
       license='LGPL',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
